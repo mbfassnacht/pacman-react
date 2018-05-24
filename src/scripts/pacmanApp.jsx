@@ -8,11 +8,15 @@ class PacmanApp extends React.Component {
         super(props);
     }
 
+    increaseValue() {
+        this.refs.header.increase();
+    }
+
     render() {
         return (
             <div className="pacman-app">
-                <Header></Header>
-                <Scene></Scene>
+                <Header ref="header"></Header>
+                <Scene action = {this.increaseValue.bind(this)}></Scene>
             </div>
         );
     }

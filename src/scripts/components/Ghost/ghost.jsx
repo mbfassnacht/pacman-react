@@ -7,7 +7,7 @@ class Ghost extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {position: {top: 0, left: 0}, direction: 'left' };
+		this.state = {position: {top: 300, left: 300}, direction: 'left' };
 	}
 
 	componentDidMount() {
@@ -15,6 +15,7 @@ class Ghost extends React.Component {
 		setInterval(this.move.bind(this), 100);
 		setInterval(this.changeDirection.bind(this), 500);
 	}
+
 	changeDirection() {
 		var movement = Math.floor(Math.random() * 4) + 0;
 		var arrayOfMovement = ['left', 'up', 'down', 'right'];
@@ -39,11 +40,11 @@ class Ghost extends React.Component {
 			} else {
 				if (this.state.direction  === 'right') {
 					this.setState({
-						position: {top: currentTop, left: Math.min(currentLeft + this.props.velocity, window.innerWidth - this.props.border - this.props.pacmanSize) }
+						position: {top: currentTop, left: Math.min(currentLeft + this.props.velocity, window.innerWidth - this.props.border - this.props.ghostSize) }
 					});
 				} else {
 					this.setState({
-						position: {top: Math.min(currentTop + this.props.velocity, window.innerHeight - this.props.pacmanSize - this.props.border - this.props.topScoreBoard), left: currentLeft }
+						position: {top: Math.min(currentTop + this.props.velocity, window.innerHeight - this.props.ghostSize - this.props.border - this.props.topScoreBoard), left: currentLeft }
 					});
 				}
 			}
@@ -62,7 +63,7 @@ class Ghost extends React.Component {
 
 Ghost.defaultProps = {
 	velocity: 20,
-	pacmanSize: 60,
+	ghostSize: 60,
 	border: 20,
 	topScoreBoard: 100
 };
