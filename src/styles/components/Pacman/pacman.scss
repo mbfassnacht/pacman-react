@@ -1,0 +1,19 @@
+.pacman {
+    width: 60px;
+    height: 63px;
+    position: absolute;
+    .svg {
+        fill: $color2;
+    }
+    &.left {
+        transform: rotateY(180deg);
+    }
+
+    &.up {
+        transform: rotate(-90deg);
+    }
+
+    &.down {
+        transform: rotate(90deg);
+    }
+}

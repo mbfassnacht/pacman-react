@@ -1,0 +1,7 @@
+.scene {
+    height: calc(100vh - 120px);
+    width: calc(100vw - 20px);
+    background-color: $color1;
+    position: relative;
+    border: 10px $color3 solid;
+}

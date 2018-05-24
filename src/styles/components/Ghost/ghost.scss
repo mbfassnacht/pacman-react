@@ -1,0 +1,40 @@
+.ghost {
+    width: 60px;
+    height: 63px;
+    position: absolute;
+    &.red {
+        .svg {
+            fill: red;
+        }
+    }
+
+    &.green {
+        .svg {
+            fill: green;
+        }
+    }
+
+    &.blue {
+        .svg {
+            fill: blue;
+        }
+    }
+
+    &.orange {
+        .svg {
+            fill: orange;
+        }
+    }
+
+    &.left {
+        transform: rotateY(180deg);
+    }
+
+    &.up {
+        transform: rotate(-90deg);
+    }
+
+    &.down {
+        transform: rotate(90deg);
+    }
+}

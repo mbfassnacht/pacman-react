@@ -1,0 +1,22 @@
+.header {
+    height: 100px;
+    background-color: $color3;
+    color: yellow;
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    .title {
+        font-size: 80px;
+        width: 50%;
+        text-align: left;
+        margin-top: 10px;
+    }
+
+    .score {
+        font-size: 40px;
+        width: 50%;
+        text-align: right;
+        margin-top: 10px;
+    }
+}

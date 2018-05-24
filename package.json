@@ -1,0 +1,70 @@
+{
+  "name": "pacman-react",
+  "version": "2.0.0",
+  "description": "Pacman game created with react",
+  "main": "src/scripts/index.js",
+  "author": "maximobelen",
+  "private": true,
+  "scripts": {
+    "lint": "eslint src",
+    "assets": "cp -R ./src/assets/* ./dist/",
+    "fonts": "cp -R ./fonts ./dist/",
+    "start": "webpack-dev-server --mode development",
+    "build": "webpack --mode production  && npm run assets && npm run fonts",
+    "test": "NODE_ENV=test jest",
+    "test:watch": "jest --watch"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "moduleNameMapper": {
+      "\\.(s?css|less)$": "identity-obj-proxy"
+    }
+  },
+  "repository": "",
+  "keywords": [],
+  "devDependencies": {
+    "autoprefixer": "^8.5.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^6.1.2",
+    "babel-jest": "^22.4.4",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-dynamic-import-node": "^1.2.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.0.15",
+    "babel-preset-stage-0": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.19",
+    "css-loader": "^0.28.11",
+    "escope": "^3.6.0",
+    "eslint": "^4.19.1",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.8.2",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^22.4.4",
+    "node-sass": "^4.9.0",
+    "postcss-loader": "^2.1.5",
+    "raw-loader": "^0.5.1",
+    "react-test-renderer": "^16.3.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.13.0",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.8.3",
+    "webpack-cli": "^2.0.13",
+    "webpack-dev-server": "^3.1.4",
+    "webpack-md5-hash": "0.0.6"
+  },
+  "dependencies": {
+    "fbemitter": "^2.1.1",
+    "flux": "^3.1.3",
+    "is-mobile": "^0.2.2",
+    "normalize.css": "^4.0.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-svg-inline": "^2.1.0"
+  }
+}
