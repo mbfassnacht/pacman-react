@@ -8,6 +8,12 @@
         }
     }
 
+    &.white {
+        .svg {
+            fill: white;
+        }
+    }
+
     &.green {
         .svg {
             fill: green;

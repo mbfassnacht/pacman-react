@@ -7,13 +7,20 @@ class Ghost extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {position: {top: 300, left: 300}, direction: 'left' };
+		this.state = {position: {top: 300, left: 300}, direction: 'left', color: this.props.color };
 	}
 
 	componentDidMount() {
 		this.container = ReactDOM.findDOMNode(this);
-		setInterval(this.move.bind(this), 100);
-		setInterval(this.changeDirection.bind(this), 500);
+		this.moveInterval = setInterval(this.move.bind(this), 100);
+		this.changeDirectionInterval = setInterval(this.changeDirection.bind(this), 500);
+	}
+
+	kill() {
+		clearInterval(this.moveInterval);
+		clearInterval(this.changeDirectionInterval);
+		this.setState({color: 'white' });
+
 	}
 
 	changeDirection() {
@@ -52,9 +59,8 @@ class Ghost extends React.Component {
 	}
 
 	render() {
-		var color = this.props.color;
 		return (
-			<div style = {this.state.position} className = {'ghost ' + (color)}>
+			<div style = {this.state.position} className = {'ghost ' + (this.state.color)}>
 				<SVGInline svg = {icon} />
 			</div>
 		);

@@ -12,11 +12,15 @@ class PacmanApp extends React.Component {
         this.refs.header.increase();
     }
 
+    gameOver() {
+        this.refs.header.gameOver();
+    }
+
     render() {
         return (
             <div className="pacman-app">
                 <Header ref="header"></Header>
-                <Scene action = {this.increaseValue.bind(this)}></Scene>
+                <Scene gameOver = {this.gameOver.bind(this)} increase= {this.increaseValue.bind(this)}></Scene>
             </div>
         );
     }

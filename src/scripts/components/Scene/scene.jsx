@@ -33,11 +33,20 @@ class Scene extends React.Component {
 			}
 
 			if (this.crashed) {
-				console.log("GAME OVER");
+				this.props.gameOver();
 				clearInterval(this.intervalCrash);
+				this.killGhosts();
 				break;
 			}
 		}
+	}
+
+	killGhosts() {
+		for (var i = 1; i <= 4; i++) {
+			var currentGhost = this.refs['ghost' + i];
+			currentGhost.kill();
+		}
+
 	}
 
 	lookForEat() {
@@ -57,7 +66,7 @@ class Scene extends React.Component {
 				if ((pacmanY >= currentFoodY && pacmanY <= currentFoodLastY) || (pacmanLastY >= currentFoodY && pacmanLastY <= currentFoodLastY)) {
 					if (!currentFood.state.hidden) {
 						currentFood.ate();
-						this.props.action();
+						this.props.increase();
 					}
 				}
 			}

@@ -5,7 +5,7 @@ class Header extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {points: 0};
+		this.state = {points: 0, playing: true};
 	}
 
 	componentDidMount() {
@@ -13,8 +13,14 @@ class Header extends React.Component {
 	}
 
 	increase() {
-		var currentPoints = this.state.points + 1;
-		this.setState({points: currentPoints});
+		if (this.state.playing) {
+			var currentPoints = this.state.points + 1;
+			this.setState({points: currentPoints});
+		}
+	}
+
+	gameOver() {
+		this.setState({playing:false, points: 'GAME OVER'});
 	}
 
 	render() {
