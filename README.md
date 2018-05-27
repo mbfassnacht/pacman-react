@@ -1,6 +1,9 @@
 # pacman-react
 Pacman game created with react
 
+Take a look to the [Demo](http://maximobelen.com/pacman-react/)
+
+
 [![pacman](https://github.com/maximobelen/assets/raw/master/images/pacman-react/react-pacman.png)](https://github.com/maximobelen/assets/raw/master/images/pacman-react/react-pacman.png)
 
 
