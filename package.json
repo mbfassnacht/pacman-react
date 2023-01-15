@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "description": "Pacman game created with react",
   "author": "mbfassnacht",
+  "homepage": "https://mbfassnacht.de/pacman-react/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
