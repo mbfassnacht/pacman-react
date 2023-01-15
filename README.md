@@ -1,7 +1,10 @@
 # pacman-react
 Pacman game created with react
 
-[![pacman](https://github.com/maximobelen/assets/raw/master/images/pacman-react/react-pacman.png)](https://github.com/maximobelen/assets/raw/master/images/pacman-react/react-pacman.png)
+Take a look to the [Demo](https://mbfassnacht.github.io/pacman-react/)
+
+
+[![pacman](https://github.com/mbfassnacht/assets/raw/master/images/pacman-react/react-pacman.png)](https://github.com/mbfassnacht/assets/raw/master/images/pacman-react/react-pacman.png)
 
 
 ## INSTALLATION DEPENDENCES
