@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Position } from "../types/position";
 import colors from "../styles/Colors";
 import { useGameContext } from "../context/GameContext";
+import { GAME_STATUS } from "../types/gameStatus";
 
 interface StyledFoodProps {
   position: Position;
@@ -49,7 +50,7 @@ const Food = (props: FoodProps) => {
       eaten();
       if (foodAmount === points + 1) {
         setGameEnded(true);
-        setGameStatus("won");
+        setGameStatus(GAME_STATUS.WON);
       }
       setPoints(points + 1);
     }

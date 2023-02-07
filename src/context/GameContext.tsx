@@ -1,6 +1,6 @@
 import { createContext, useContext, ReactNode, useState } from "react";
 import { Position, pacmanStartPosition } from "../types/position";
-import { GameStatus } from "../types/gameStatus";
+import { GAME_STATUS, GameStatus } from "../types/gameStatus";
 
 interface GhostPositions {
   [key: string]: Position;
@@ -25,7 +25,7 @@ type GameContextType = {
 const contextDefaultValues: GameContextType = {
   foodAmount: 0,
   gameEnded: false,
-  gameStatus: "in_progress",
+  gameStatus: GAME_STATUS.IN_PROGRESS,
   ghostPositions: {},
   pacmanPosition: { top: 0, left: 0 },
   points: 0,
@@ -90,7 +90,7 @@ export function GameProvider({ children }: Props) {
   const restartGame = () => {
     _setPoints(0);
     _setGameEnded(false);
-    _setGameStatus("in_progress");
+    _setGameStatus(GAME_STATUS.IN_PROGRESS);
     _setPacmanPosition(pacmanStartPosition);
 
     const event = new Event("restart-game");

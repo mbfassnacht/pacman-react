@@ -5,6 +5,8 @@ import Food from "./Food";
 import styled from "styled-components";
 import colors from "../styles/Colors";
 import { useGameContext } from "../context/GameContext";
+import { GAME_STATUS } from "../types/gameStatus";
+import { COLOR } from "../types/color";
 
 type SceneProps = {
   foodSize: number;
@@ -60,14 +62,14 @@ const Scene = (props: SceneProps) => {
     <StyledScene>
       {gameEnded && (
         <OverlayContent>
-          {gameStatus === "won" ? (
+          {gameStatus === GAME_STATUS.WON ? (
             <CenterContainer>
               <div>You won with {points} Points</div>{" "}
               <button onClick={() => restartGame()}>Play again</button>
             </CenterContainer>
           ) : (
             <CenterContainer>
-              <div>You loose with {points} Points</div>
+              <div>GAME OVER! You scored {points} Points</div>
               <button onClick={() => restartGame()}>Try Again</button>
             </CenterContainer>
           )}
@@ -87,7 +89,7 @@ const Scene = (props: SceneProps) => {
         size={60}
         border={20}
         topScoreBoard={100}
-        color="red"
+        color={COLOR.RED}
         name="ghost1"
       ></Ghost>
       <Ghost
@@ -95,7 +97,7 @@ const Scene = (props: SceneProps) => {
         size={60}
         border={20}
         topScoreBoard={100}
-        color="green"
+        color={COLOR.GREEN}
         name="ghost2"
       ></Ghost>
       <Ghost
@@ -103,7 +105,7 @@ const Scene = (props: SceneProps) => {
         size={60}
         border={20}
         topScoreBoard={100}
-        color="blue"
+        color={COLOR.BLUE}
         name="ghost3"
       ></Ghost>
       <Ghost
@@ -111,7 +113,7 @@ const Scene = (props: SceneProps) => {
         size={60}
         border={20}
         topScoreBoard={100}
-        color="orange"
+        color={COLOR.ORANGE}
         name="ghost4"
       ></Ghost>
     </StyledScene>

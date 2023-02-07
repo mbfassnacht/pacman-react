@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { Position, ghostStartPosition } from "../types/position";
-import { Direction } from "../types/direction";
+import { DIRECTION, Direction } from "../types/direction";
 import { Character } from "../types/character";
 import { useGameContext } from "../context/GameContext";
 import { useInterval } from "../hooks/useInterval";
+import { COLOR } from "../types/color";
+import { GAME_STATUS } from "../types/gameStatus";
 
 interface StyledGhostProps {
   position: Position;
@@ -40,7 +42,7 @@ const Ghost = (props: Character) => {
   const { gameEnded, pacmanPosition, setGameEnded, setGameStatus } =
     useGameContext();
   const [position, setPosition] = React.useState<Position>(ghostStartPosition);
-  const [direction, setDirection] = React.useState<Direction>("left");
+  const [direction, setDirection] = React.useState<Direction>(DIRECTION.LEFT);
   const [color, setColor] = React.useState<string>(props.color!);
   const [changeDirectionWaitingTime, setChangeDirectionWaitingTime] =
     React.useState(0);
@@ -63,7 +65,12 @@ const Ghost = (props: Character) => {
     if (!gameEnded) {
       if (changeDirectionWaitingTime > 4) {
         const movement = Math.floor(Math.random() * 4) + 0;
-        const arrayOfMovement: Direction[] = ["left", "up", "down", "right"];
+        const arrayOfMovement: Direction[] = [
+          DIRECTION.LEFT,
+          DIRECTION.UP,
+          DIRECTION.DOWN,
+          DIRECTION.RIGHT,
+        ];
         setDirection(arrayOfMovement[movement]);
         setChangeDirectionWaitingTime(0);
       } else {
@@ -77,20 +84,19 @@ const Ghost = (props: Character) => {
         const currentTop = position.top;
         let newPosition: Position = { top: 0, left: 0 };
         switch (direction) {
-          case "left":
+          case DIRECTION.LEFT:
             newPosition = {
               top: currentTop,
               left: Math.max(currentLeft - props.velocity, 0),
             };
             break;
-          case "up":
+          case DIRECTION.UP:
             newPosition = {
               top: Math.max(currentTop - props.velocity, 0),
               left: currentLeft,
             };
             break;
-
-          case "right":
+          case DIRECTION.RIGHT:
             newPosition = {
               top: currentTop,
               left: Math.min(
@@ -119,13 +125,13 @@ const Ghost = (props: Character) => {
           pacmanPosition.top < newPosition.top + props.size
         ) {
           setGameEnded(true);
-          setGameStatus("lost");
+          setGameStatus(GAME_STATUS.LOST);
         }
 
         return newPosition;
       });
     } else {
-      setColor("white");
+      setColor(COLOR.GHOST_DEAD);
     }
   }
 
@@ -146,16 +152,16 @@ const StyledGhost = styled.div<StyledGhostProps>`
   svg {
     fill: ${(props) => {
       switch (props.color) {
-        case "red":
-          return "red";
-        case "blue":
-          return "blue";
-        case "orange":
-          return "orange";
-        case "green":
-          return "green";
+        case COLOR.RED:
+          return COLOR.RED;
+        case COLOR.BLUE:
+          return COLOR.BLUE;
+        case COLOR.ORANGE:
+          return COLOR.ORANGE;
+        case COLOR.GREEN:
+          return COLOR.GREEN;
         default:
-          return "white";
+          return COLOR.GHOST_DEAD;
       }
     }};
   }

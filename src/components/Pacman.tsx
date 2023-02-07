@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { Position } from "../types/position";
-import { Direction } from "../types/direction";
+import { ARROW, DIRECTION, Direction } from "../types/direction";
 import { Character } from "../types/character";
 import { useGameContext } from "../context/GameContext";
 import { useInterval } from "../hooks/useInterval";
+import { COLOR } from "../types/color";
 
 interface StyledPacmanProps {
   direction: Direction;
@@ -29,6 +30,7 @@ const PacmanIcon = () => (
 			c21-0.1,37.9-16.4,37.9-36.5s-16.9-36.4-37.9-36.5c-21.2-0.1-38.3,16.4-38.1,36.7C290.5,143.5,307.6,159.7,328.5,159.6z"
         />
         <path
+          fill="black"
           d="M328.5,159.6c-21,0.1-38-16.1-38.1-36.3c-0.1-20.3,17-36.8,38.1-36.7c21,0.1,37.9,16.4,37.9,36.5S349.5,159.5,328.5,159.6
 			z"
         />
@@ -43,21 +45,20 @@ const Pacman = (props: Character) => {
     pacmanPosition: position,
     setPacmanPosition,
   } = useGameContext();
-  const [direction, setDirection] = React.useState<Direction>("left");
+  const [direction, setDirection] = React.useState<Direction>(DIRECTION.LEFT);
   const [color, setColor] = React.useState<string>(props.color);
-
-  React.useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, []);
 
   React.useEffect(() => {
     function gameRestarted() {
       setColor(props.color);
     }
-
+    document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("restart-game", gameRestarted);
-    return () => document.removeEventListener("restart-game", gameRestarted);
+
+    return () => {
+      document.removeEventListener("restart-game", gameRestarted);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   useInterval(() => {
@@ -65,7 +66,7 @@ const Pacman = (props: Character) => {
   }, 100);
 
   function handleKeyDown(e: any) {
-    const arrows = [37, 38, 39, 40];
+    const arrows = [ARROW.LEFT, ARROW.UP, ARROW.RIGHT, ARROW.DOWN];
 
     if (arrows.indexOf(e.keyCode) >= 0) {
       rotate(e.keyCode);
@@ -78,19 +79,19 @@ const Pacman = (props: Character) => {
       const currentTop = position.top;
       let newPosition: Position = { top: 0, left: 0 };
       switch (direction) {
-        case "left":
+        case DIRECTION.LEFT:
           newPosition = {
             top: currentTop,
             left: Math.max(currentLeft - props.velocity, 0),
           };
           break;
-        case "up":
+        case DIRECTION.UP:
           newPosition = {
             top: Math.max(currentTop - props.velocity, 0),
             left: currentLeft,
           };
           break;
-        case "right":
+        case DIRECTION.RIGHT:
           newPosition = {
             top: currentTop,
             left: Math.min(
@@ -114,24 +115,24 @@ const Pacman = (props: Character) => {
       }
       setPacmanPosition(newPosition);
     } else {
-      setColor("white");
+      setColor(COLOR.PACMAN_DEAD);
     }
   }
 
   function rotate(keypressed: number) {
     if (!gameEnded) {
-      if (keypressed === 37) {
-        setDirection("left");
-      } else {
-        if (keypressed === 38) {
-          setDirection("up");
-        } else {
-          if (keypressed === 39) {
-            setDirection("right");
-          } else {
-            setDirection("down");
-          }
-        }
+      switch (keypressed) {
+        case ARROW.LEFT:
+          setDirection(DIRECTION.LEFT);
+          break;
+        case ARROW.UP:
+          setDirection(DIRECTION.UP);
+          break;
+        case ARROW.RIGHT:
+          setDirection(DIRECTION.RIGHT);
+          break;
+        default:
+          setDirection(DIRECTION.DOWN);
       }
     }
   }
@@ -151,11 +152,11 @@ const StyledPacman = styled.div<StyledPacmanProps>`
   left: ${(props) => props.position.left}px;
   transform: ${(props) => {
     switch (props.direction) {
-      case "left":
+      case DIRECTION.LEFT:
         return "rotateY(180deg)";
-      case "up":
+      case DIRECTION.UP:
         return "rotate(-90deg)";
-      case "down":
+      case DIRECTION.DOWN:
         return "rotate(90deg)";
       default:
         return "rotate(0deg)";
