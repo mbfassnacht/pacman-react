@@ -2,16 +2,44 @@ import React from "react";
 import colors from "../styles/Colors";
 import styled from "styled-components";
 import { useGameContext } from "../context/GameContext";
+import { useInterval } from "../hooks/useInterval";
 
 const Header = () => {
-  const { points } = useGameContext();
+  const { points, foodAmount, gameEnded } = useGameContext();
+  const [timeElapsed, setTimeElapsed] = React.useState(0);
+
+  React.useEffect(() => {
+    document.addEventListener("restart-game", gameRestarted);
+    return () => document.removeEventListener("restart-game", gameRestarted);
+  }, []);
+
+  function gameRestarted() {
+    setTimeElapsed(0);
+  }
+
+  useInterval(() => {
+    if (!gameEnded) {
+      setTimeElapsed((previuosTime) => {
+        return previuosTime + 1;
+      });
+    }
+  }, 1000);
 
   return (
     <StyledHeader>
       <span className="left title">PACMAN</span>
-      <span className="right score">
-        SCORE: <span className="points">{points}</span>
-      </span>
+      <div className="right score">
+        <div>
+          <strong>Score: </strong>
+          <span className="points">
+            {points} / {foodAmount}
+          </span>
+        </div>
+        <div>
+          <strong>Time elapsed: </strong>
+          <span className="points">{timeElapsed}</span>
+        </div>
+      </div>
     </StyledHeader>
   );
 };
@@ -23,18 +51,16 @@ const StyledHeader = styled.div`
   display: flex;
   padding-left: 10px;
   padding-right: 10px;
+  justify-content: space-between;
 
   .title {
     font-size: 80px;
-    width: 50%;
     text-align: left;
     margin-top: 10px;
-    margin-left: 150px;
   }
 
   .score {
-    font-size: 40px;
-    width: 50%;
+    font-size: 34px;
     text-align: right;
     margin-top: 10px;
   }

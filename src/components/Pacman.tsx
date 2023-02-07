@@ -47,11 +47,9 @@ const Pacman = (props: Character) => {
   } = useGameContext();
   const [direction, setDirection] = React.useState<Direction>(DIRECTION.LEFT);
   const [color, setColor] = React.useState<string>(props.color);
+  useInterval(move, 100);
 
   React.useEffect(() => {
-    function gameRestarted() {
-      setColor(props.color);
-    }
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("restart-game", gameRestarted);
 
@@ -61,9 +59,9 @@ const Pacman = (props: Character) => {
     };
   }, []);
 
-  useInterval(() => {
-    move();
-  }, 100);
+  function gameRestarted() {
+    setColor(props.color);
+  }
 
   function handleKeyDown(e: any) {
     const arrows = [ARROW.LEFT, ARROW.UP, ARROW.RIGHT, ARROW.DOWN];

@@ -46,22 +46,19 @@ const Ghost = (props: Character) => {
   const [color, setColor] = React.useState<string>(props.color!);
   const [changeDirectionWaitingTime, setChangeDirectionWaitingTime] =
     React.useState(0);
-
-  useInterval(() => {
-    startMoving();
-  }, 100);
+  useInterval(move, 100);
 
   React.useEffect(() => {
-    function gameRestarted() {
-      setColor(props.color);
-      setPosition(ghostStartPosition);
-    }
-
     document.addEventListener("restart-game", gameRestarted);
     return () => document.removeEventListener("restart-game", gameRestarted);
   }, []);
 
-  function startMoving() {
+  function gameRestarted() {
+    setColor(props.color);
+    setPosition(ghostStartPosition);
+  }
+
+  function move() {
     if (!gameEnded) {
       if (changeDirectionWaitingTime > 4) {
         const movement = Math.floor(Math.random() * 4) + 0;

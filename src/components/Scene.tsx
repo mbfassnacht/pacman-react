@@ -40,20 +40,16 @@ const generateFoodMatrix = (props: SceneProps, amountOfFood: number) => {
 };
 
 const Scene = (props: SceneProps) => {
-  const {
-    setFoodAmount,
-    restartGame,
-    foodAmount,
-    gameEnded,
-    gameStatus,
-    points,
-  } = useGameContext();
+  const { setFoodAmount, restartGame, foodAmount, gameEnded, gameStatus } =
+    useGameContext();
 
   React.useEffect(() => {
     const amountOfFood =
-      ((window.innerWidth - props.border - props.foodSize) *
-        (window.innerHeight - props.border - props.topScoreBoard)) /
-      (props.foodSize * props.foodSize);
+      Math.floor((window.innerWidth - props.border) / props.foodSize) *
+      Math.floor(
+        (window.innerHeight - props.border - props.topScoreBoard) /
+          props.foodSize
+      );
 
     setFoodAmount(amountOfFood);
   }, []);
@@ -64,13 +60,21 @@ const Scene = (props: SceneProps) => {
         <OverlayContent>
           {gameStatus === GAME_STATUS.WON ? (
             <CenterContainer>
-              <div>You won with {points} Points</div>{" "}
-              <button onClick={() => restartGame()}>Play again</button>
+              <div>
+                <strong>Congratulations :)</strong>
+              </div>
+              <StyledButton onClick={() => restartGame()}>
+                Play again
+              </StyledButton>
             </CenterContainer>
           ) : (
             <CenterContainer>
-              <div>GAME OVER! You scored {points} Points</div>
-              <button onClick={() => restartGame()}>Try Again</button>
+              <div>
+                <strong>GAME OVER :(</strong>
+              </div>
+              <StyledButton onClick={() => restartGame()}>
+                Try Again
+              </StyledButton>
             </CenterContainer>
           )}
         </OverlayContent>
@@ -128,8 +132,8 @@ const CenterContainer = styled.div`
   transform: translate(-50%, -50%);
   text-align: center;
   z-index: 9999;
-  color: black;
-  background-color: white;
+  background-color: ${colors.color2};
+  color: ${colors.color3};
   padding: 20px;
   button {
     cursor: pointer;
@@ -150,6 +154,20 @@ const StyledScene = styled.div`
   background-color: ${colors.color1};
   position: relative;
   border: 10px ${colors.color3} solid;
+`;
+
+const StyledButton = styled.button`
+  padding: 8px 16px;
+  font-size: 24px;
+  background-color: ${colors.color1};
+  color: ${colors.color2};
+  border: 1px ${colors.color3} solid;
+  cursor: pointer;
+
+  :hover {
+    background-color: ${colors.color2};
+    color: ${colors.color1};
+  }
 `;
 
 export default Scene;
