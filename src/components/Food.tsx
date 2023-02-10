@@ -19,14 +19,8 @@ export type FoodProps = {
 const Food = (props: FoodProps) => {
   const position = props.position;
   const [isHidden, setIsHidden] = React.useState(false);
-  const {
-    pacmanPosition,
-    setPoints,
-    points,
-    foodAmount,
-    setGameEnded,
-    setGameStatus,
-  } = useGameContext();
+  const { pacmanPosition, setPoints, points, foodAmount, setGameStatus } =
+    useGameContext();
 
   function eaten() {
     setIsHidden(true);
@@ -49,7 +43,6 @@ const Food = (props: FoodProps) => {
     ) {
       eaten();
       if (foodAmount === points + 1) {
-        setGameEnded(true);
         setGameStatus(GAME_STATUS.WON);
       }
       setPoints(points + 1);
@@ -76,7 +69,7 @@ const StyledFood = styled.div<StyledFoodProps>`
     width: 10px;
     height: 10px;
     background-color: ${colors.color2};
-    margin: 25px;
+    margin: 20px;
   }
 `;
 

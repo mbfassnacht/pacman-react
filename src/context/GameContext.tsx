@@ -1,6 +1,7 @@
 import { createContext, useContext, ReactNode, useState } from "react";
 import { Position, pacmanStartPosition } from "../types/position";
 import { GAME_STATUS, GameStatus } from "../types/gameStatus";
+import { DIFFICULTY, Difficulty } from "../types/difficulty";
 
 interface GhostPositions {
   [key: string]: Position;
@@ -8,15 +9,15 @@ interface GhostPositions {
 
 type GameContextType = {
   foodAmount: number;
-  gameEnded: boolean | undefined;
   gameStatus: GameStatus;
   ghostPositions: GhostPositions;
   pacmanPosition: Position;
   points: number;
+  difficulty: Difficulty;
   setFoodAmount: (foodAmount: number) => void;
   setPacmanPosition: (position: Position) => void;
   setPoints: (points: number) => void;
-  setGameEnded: (gameEnded: boolean) => void;
+  setDifficulty: (difficulty: Difficulty) => void;
   setGameStatus: (gameStatus: GameStatus) => void;
   setGhostPosition: (name: string, ghostPositions: Position) => void;
   restartGame: () => void;
@@ -24,18 +25,18 @@ type GameContextType = {
 
 const contextDefaultValues: GameContextType = {
   foodAmount: 0,
-  gameEnded: false,
-  gameStatus: GAME_STATUS.IN_PROGRESS,
+  gameStatus: GAME_STATUS.PAUSED,
   ghostPositions: {},
   pacmanPosition: { top: 0, left: 0 },
   points: 0,
+  difficulty: DIFFICULTY.MEDIUM,
   setFoodAmount: () => {},
   setPacmanPosition: () => {},
   setPoints: () => {},
-  setGameEnded: () => {},
   setGameStatus: () => {},
   setGhostPosition: () => {},
   restartGame: () => {},
+  setDifficulty: () => {},
 };
 
 const GameContext = createContext<GameContextType>(contextDefaultValues);
@@ -57,9 +58,10 @@ export function GameProvider({ children }: Props) {
     contextDefaultValues.foodAmount
   );
 
-  const [gameEnded, _setGameEnded] = useState<boolean | undefined>(
-    contextDefaultValues.gameEnded
+  const [difficulty, _setDifficulty] = useState<Difficulty>(
+    contextDefaultValues.difficulty
   );
+
   const [gameStatus, _setGameStatus] = useState<GameStatus>(
     contextDefaultValues.gameStatus
   );
@@ -71,9 +73,7 @@ export function GameProvider({ children }: Props) {
   const setFoodAmount = (foodAmount: number) => {
     _setFoodAmount(foodAmount);
   };
-  const setGameEnded = (gameEnded: boolean) => {
-    _setGameEnded(gameEnded);
-  };
+
   const setGameStatus = (gameStatus: GameStatus) => {
     _setGameStatus(gameStatus);
   };
@@ -87,9 +87,12 @@ export function GameProvider({ children }: Props) {
     _setPoints(points);
   };
 
+  const setDifficulty = (difficulty: Difficulty) => {
+    _setDifficulty(difficulty);
+  };
+
   const restartGame = () => {
     _setPoints(0);
-    _setGameEnded(false);
     _setGameStatus(GAME_STATUS.IN_PROGRESS);
     _setPacmanPosition(pacmanStartPosition);
 
@@ -99,18 +102,18 @@ export function GameProvider({ children }: Props) {
 
   const value = {
     foodAmount,
-    gameEnded,
     gameStatus,
     ghostPositions,
     pacmanPosition,
     points,
+    difficulty,
     restartGame,
     setFoodAmount,
-    setGameEnded,
     setGameStatus,
     setGhostPosition,
     setPacmanPosition,
     setPoints,
+    setDifficulty,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

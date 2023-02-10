@@ -39,8 +39,7 @@ const GhostIcon = () => (
 );
 
 const Ghost = (props: Character) => {
-  const { gameEnded, pacmanPosition, setGameEnded, setGameStatus } =
-    useGameContext();
+  const { pacmanPosition, setGameStatus, gameStatus } = useGameContext();
   const [position, setPosition] = React.useState<Position>(ghostStartPosition);
   const [direction, setDirection] = React.useState<Direction>(DIRECTION.LEFT);
   const [color, setColor] = React.useState<string>(props.color!);
@@ -59,7 +58,7 @@ const Ghost = (props: Character) => {
   }
 
   function move() {
-    if (!gameEnded) {
+    if (gameStatus === GAME_STATUS.IN_PROGRESS) {
       if (changeDirectionWaitingTime > 4) {
         const movement = Math.floor(Math.random() * 4) + 0;
         const arrayOfMovement: Direction[] = [
@@ -80,6 +79,7 @@ const Ghost = (props: Character) => {
         const currentLeft = position.left;
         const currentTop = position.top;
         let newPosition: Position = { top: 0, left: 0 };
+
         switch (direction) {
           case DIRECTION.LEFT:
             newPosition = {
@@ -121,13 +121,16 @@ const Ghost = (props: Character) => {
           pacmanPosition.top > newPosition.top - props.size &&
           pacmanPosition.top < newPosition.top + props.size
         ) {
-          setGameEnded(true);
           setGameStatus(GAME_STATUS.LOST);
         }
 
         return newPosition;
       });
-    } else {
+    }
+    if (
+      gameStatus !== GAME_STATUS.PAUSED &&
+      gameStatus !== GAME_STATUS.IN_PROGRESS
+    ) {
       setColor(COLOR.GHOST_DEAD);
     }
   }

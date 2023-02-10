@@ -1,11 +1,12 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Position } from "../types/position";
 import { ARROW, DIRECTION, Direction } from "../types/direction";
 import { Character } from "../types/character";
 import { useGameContext } from "../context/GameContext";
 import { useInterval } from "../hooks/useInterval";
 import { COLOR } from "../types/color";
+import { GAME_STATUS } from "../types/gameStatus";
 
 interface StyledPacmanProps {
   direction: Direction;
@@ -13,44 +14,42 @@ interface StyledPacmanProps {
   color: string;
 }
 
-const PacmanIcon = () => (
-  <svg
-    version="1.1"
-    id="Layer_1"
-    xmlns="http://www.w3.org/2000/svg"
-    x="0px"
-    y="0px"
-    viewBox="0 0 532.3 561.9"
-  >
-    <g>
-      <g>
-        <path
-          d="M532.3,156.5c-83.6,41.4-167.1,82.7-251.4,124.4c84.1,42.2,167.3,84,250.5,125.9c-48.3,100.6-165.6,172-294.4,151.5
-			C98.2,536.2,0.3,417,0,281.5C-0.3,149.8,92.2,30.8,228.9,4.9C360.6-19.9,482,51.6,532.3,156.5z M328.5,159.6
-			c21-0.1,37.9-16.4,37.9-36.5s-16.9-36.4-37.9-36.5c-21.2-0.1-38.3,16.4-38.1,36.7C290.5,143.5,307.6,159.7,328.5,159.6z"
-        />
-        <path
-          fill="black"
-          d="M328.5,159.6c-21,0.1-38-16.1-38.1-36.3c-0.1-20.3,17-36.8,38.1-36.7c21,0.1,37.9,16.4,37.9,36.5S349.5,159.5,328.5,159.6
-			z"
-        />
-      </g>
-    </g>
-  </svg>
-);
-
 const Pacman = (props: Character) => {
   const {
-    gameEnded,
     pacmanPosition: position,
     setPacmanPosition,
+    gameStatus,
   } = useGameContext();
-  const [direction, setDirection] = React.useState<Direction>(DIRECTION.LEFT);
+  const [direction, setDirection] = React.useState<Direction>(DIRECTION.RIGHT);
   const [color, setColor] = React.useState<string>(props.color);
   useInterval(move, 100);
 
   React.useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
+    function rotate(keypressed: number) {
+      switch (keypressed) {
+        case ARROW.LEFT:
+          setDirection(DIRECTION.LEFT);
+          break;
+        case ARROW.UP:
+          setDirection(DIRECTION.UP);
+          break;
+        case ARROW.RIGHT:
+          setDirection(DIRECTION.RIGHT);
+          break;
+        default:
+          setDirection(DIRECTION.DOWN);
+      }
+    }
+
+    function handleKeyDown(e: any) {
+      const arrows = [ARROW.LEFT, ARROW.UP, ARROW.RIGHT, ARROW.DOWN];
+
+      if (arrows.indexOf(e.keyCode) >= 0) {
+        rotate(e.keyCode);
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown, false);
     document.addEventListener("restart-game", gameRestarted);
 
     return () => {
@@ -63,16 +62,8 @@ const Pacman = (props: Character) => {
     setColor(props.color);
   }
 
-  function handleKeyDown(e: any) {
-    const arrows = [ARROW.LEFT, ARROW.UP, ARROW.RIGHT, ARROW.DOWN];
-
-    if (arrows.indexOf(e.keyCode) >= 0) {
-      rotate(e.keyCode);
-    }
-  }
-
   function move() {
-    if (!gameEnded) {
+    if (gameStatus === GAME_STATUS.IN_PROGRESS) {
       const currentLeft = position.left;
       const currentTop = position.top;
       let newPosition: Position = { top: 0, left: 0 };
@@ -112,35 +103,42 @@ const Pacman = (props: Character) => {
           };
       }
       setPacmanPosition(newPosition);
-    } else {
+    }
+    if (gameStatus === GAME_STATUS.LOST) {
       setColor(COLOR.PACMAN_DEAD);
     }
   }
 
-  function rotate(keypressed: number) {
-    if (!gameEnded) {
-      switch (keypressed) {
-        case ARROW.LEFT:
-          setDirection(DIRECTION.LEFT);
-          break;
-        case ARROW.UP:
-          setDirection(DIRECTION.UP);
-          break;
-        case ARROW.RIGHT:
-          setDirection(DIRECTION.RIGHT);
-          break;
-        default:
-          setDirection(DIRECTION.DOWN);
-      }
-    }
-  }
-
   return (
-    <StyledPacman color={color} position={position} direction={direction}>
-      <PacmanIcon />
+    <StyledPacman
+      tabIndex={0}
+      color={color}
+      position={position}
+      direction={direction}
+    >
+      <PacmanEye />
+      <PacmanMouth />
     </StyledPacman>
   );
 };
+
+const eat = keyframes`
+  0% {
+    clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
+  }
+  25% {
+    clip-path: polygon(100% 60%, 44% 48%, 100% 35%);
+  }
+  50% {
+    clip-path: polygon(100% 50%, 44% 48%, 100% 60%);
+  }
+  75% {
+    clip-path: polygon(100% 59%, 44% 48%, 100% 35%);
+  }
+  100% {
+    clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
+  }
+`;
 
 const StyledPacman = styled.div<StyledPacmanProps>`
   width: 60px;
@@ -160,10 +158,35 @@ const StyledPacman = styled.div<StyledPacmanProps>`
         return "rotate(0deg)";
     }
   }};
-
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #f2d648;
+  position: relative;
   svg {
     fill: ${(props) => props.color};
   }
+`;
+
+const PacmanEye = styled.div`
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  top: 10px;
+  right: 26px;
+  background: #333333;
+`;
+
+const PacmanMouth = styled.div`
+  animation-name: ${eat};
+  animation-duration: 0.7s;
+  animation-iteration-count: infinite;
+  background: #000;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
 `;
 
 export default Pacman;

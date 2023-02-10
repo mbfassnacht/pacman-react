@@ -3,9 +3,10 @@ import colors from "../styles/Colors";
 import styled from "styled-components";
 import { useGameContext } from "../context/GameContext";
 import { useInterval } from "../hooks/useInterval";
+import { GAME_STATUS } from "../types/gameStatus";
 
 const Header = () => {
-  const { points, foodAmount, gameEnded } = useGameContext();
+  const { points, foodAmount, gameStatus } = useGameContext();
   const [timeElapsed, setTimeElapsed] = React.useState(0);
 
   React.useEffect(() => {
@@ -18,7 +19,7 @@ const Header = () => {
   }
 
   useInterval(() => {
-    if (!gameEnded) {
+    if (gameStatus === GAME_STATUS.IN_PROGRESS) {
       setTimeElapsed((previuosTime) => {
         return previuosTime + 1;
       });
