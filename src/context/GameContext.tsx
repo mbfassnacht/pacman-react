@@ -3,14 +3,9 @@ import { Position, pacmanStartPosition } from "../types/position";
 import { GAME_STATUS, GameStatus } from "../types/gameStatus";
 import { DIFFICULTY, Difficulty } from "../types/difficulty";
 
-interface GhostPositions {
-  [key: string]: Position;
-}
-
 type GameContextType = {
   foodAmount: number;
   gameStatus: GameStatus;
-  ghostPositions: GhostPositions;
   pacmanPosition: Position;
   points: number;
   difficulty: Difficulty;
@@ -19,14 +14,12 @@ type GameContextType = {
   setPoints: (points: number) => void;
   setDifficulty: (difficulty: Difficulty) => void;
   setGameStatus: (gameStatus: GameStatus) => void;
-  setGhostPosition: (name: string, ghostPositions: Position) => void;
   restartGame: () => void;
 };
 
 const contextDefaultValues: GameContextType = {
   foodAmount: 0,
   gameStatus: GAME_STATUS.PAUSED,
-  ghostPositions: {},
   pacmanPosition: { top: 0, left: 0 },
   points: 0,
   difficulty: DIFFICULTY.MEDIUM,
@@ -34,7 +27,6 @@ const contextDefaultValues: GameContextType = {
   setPacmanPosition: () => {},
   setPoints: () => {},
   setGameStatus: () => {},
-  setGhostPosition: () => {},
   restartGame: () => {},
   setDifficulty: () => {},
 };
@@ -66,10 +58,6 @@ export function GameProvider({ children }: Props) {
     contextDefaultValues.gameStatus
   );
 
-  const [ghostPositions, _setGhostPosition] = useState<GhostPositions>(
-    contextDefaultValues.ghostPositions
-  );
-
   const setFoodAmount = (foodAmount: number) => {
     _setFoodAmount(foodAmount);
   };
@@ -77,9 +65,7 @@ export function GameProvider({ children }: Props) {
   const setGameStatus = (gameStatus: GameStatus) => {
     _setGameStatus(gameStatus);
   };
-  const setGhostPosition = (name: string, ghostNewPosition: Position) => {
-    _setGhostPosition({ ...ghostPositions, name: ghostNewPosition });
-  };
+
   const setPacmanPosition = (pacmanPosition: Position) => {
     _setPacmanPosition(pacmanPosition);
   };
@@ -103,14 +89,12 @@ export function GameProvider({ children }: Props) {
   const value = {
     foodAmount,
     gameStatus,
-    ghostPositions,
     pacmanPosition,
     points,
     difficulty,
     restartGame,
     setFoodAmount,
     setGameStatus,
-    setGhostPosition,
     setPacmanPosition,
     setPoints,
     setDifficulty,
