@@ -10,10 +10,13 @@ interface StyledFoodProps {
   hidden: boolean;
 }
 
+const eatPrecision = 18;
+
 export type FoodProps = {
   name: string;
   position: Position;
   hidden: boolean;
+  pacmanSize: number;
 };
 
 const Food = (props: FoodProps) => {
@@ -38,8 +41,13 @@ const Food = (props: FoodProps) => {
   React.useEffect(() => {
     if (
       !isHidden &&
-      pacmanPosition.left === position.left &&
-      pacmanPosition.top === position.top
+      pacmanPosition.left + (props.pacmanSize - eatPrecision) / 2 >=
+        position.left &&
+      pacmanPosition.left - (props.pacmanSize - eatPrecision) / 2 <
+        position.left &&
+      pacmanPosition.top + (props.pacmanSize - eatPrecision) / 2 >=
+        position.top &&
+      pacmanPosition.top - (props.pacmanSize - eatPrecision) / 2 < position.top
     ) {
       eaten();
       if (foodAmount === points + 1) {

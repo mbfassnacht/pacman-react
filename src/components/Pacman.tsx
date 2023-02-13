@@ -7,12 +7,17 @@ import { useGameContext } from "../context/GameContext";
 import { useInterval } from "../hooks/useInterval";
 import { COLOR } from "../types/color";
 import { GAME_STATUS } from "../types/gameStatus";
+import colors from "../styles/Colors";
 
 interface StyledPacmanProps {
   direction: Direction;
   position: Position;
-  color: string;
+  isAlive: boolean;
 }
+
+type PacmanMouthProps = {
+  moving: boolean;
+};
 
 const Pacman = (props: Character) => {
   const {
@@ -115,9 +120,10 @@ const Pacman = (props: Character) => {
       color={color}
       position={position}
       direction={direction}
+      isAlive={gameStatus !== GAME_STATUS.LOST}
     >
       <PacmanEye />
-      <PacmanMouth />
+      <PacmanMouth moving={gameStatus === GAME_STATUS.IN_PROGRESS} />
     </StyledPacman>
   );
 };
@@ -161,11 +167,8 @@ const StyledPacman = styled.div<StyledPacmanProps>`
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: #f2d648;
+  background: ${(props) => (props.isAlive ? colors.color2 : "white")};
   position: relative;
-  svg {
-    fill: ${(props) => props.color};
-  }
 `;
 
 const PacmanEye = styled.div`
@@ -175,14 +178,15 @@ const PacmanEye = styled.div`
   border-radius: 50%;
   top: 10px;
   right: 26px;
-  background: #333333;
+  background: ${colors.color1};
 `;
 
-const PacmanMouth = styled.div`
+const PacmanMouth = styled.div<PacmanMouthProps>`
   animation-name: ${eat};
   animation-duration: 0.7s;
-  animation-iteration-count: infinite;
-  background: #000;
+  animation-iteration-count: ${(props) =>
+    props.moving ? "infinite" : "initial"};
+  background: ${colors.color1};
   position: absolute;
   width: 100%;
   height: 100%;

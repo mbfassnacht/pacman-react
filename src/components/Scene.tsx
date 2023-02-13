@@ -15,6 +15,11 @@ type SceneProps = {
   topScoreBoard: number;
 };
 
+const pacmanSize = 60;
+const pacmanVelocity = 30;
+const ghostSize = 60;
+const topScoreBoardHeight = 100;
+
 const generateFoodMatrix = (props: SceneProps, amountOfFood: number) => {
   let currentTop = 0;
   let currentLeft = 0;
@@ -34,7 +39,13 @@ const generateFoodMatrix = (props: SceneProps, amountOfFood: number) => {
     const position = { left: currentLeft, top: currentTop };
     currentLeft = currentLeft + props.foodSize;
     foods.push(
-      <Food hidden={false} name={"food" + i} position={position} key={i} />
+      <Food
+        pacmanSize={pacmanSize}
+        hidden={false}
+        name={"food" + i}
+        position={position}
+        key={i}
+      />
     );
   }
   return foods;
@@ -129,35 +140,35 @@ const Scene = (props: SceneProps) => {
       )}
       {generateFoodMatrix(props, foodAmount)}
       <Pacman
-        velocity={20}
-        size={60}
+        velocity={pacmanVelocity}
+        size={pacmanSize}
         border={20}
-        topScoreBoard={100}
+        topScoreBoard={topScoreBoardHeight}
         name="pacman"
         color={colors.color2}
       ></Pacman>
       <Ghost
         velocity={ghostVelocity}
-        size={60}
+        size={ghostSize}
         border={20}
-        topScoreBoard={100}
+        topScoreBoard={topScoreBoardHeight}
         color={COLOR.RED}
         name="ghost1"
       ></Ghost>
       <Ghost
         velocity={ghostVelocity}
-        size={60}
+        size={ghostSize}
         border={20}
-        topScoreBoard={100}
+        topScoreBoard={topScoreBoardHeight}
         color={COLOR.GREEN}
         name="ghost2"
       ></Ghost>
       {difficulty !== DIFFICULTY.EASY && (
         <Ghost
           velocity={ghostVelocity}
-          size={60}
+          size={ghostSize}
           border={20}
-          topScoreBoard={100}
+          topScoreBoard={topScoreBoardHeight}
           color={COLOR.BLUE}
           name="ghost3"
         ></Ghost>
@@ -165,9 +176,9 @@ const Scene = (props: SceneProps) => {
       {difficulty === DIFFICULTY.ADVANCED && (
         <Ghost
           velocity={ghostVelocity}
-          size={60}
+          size={ghostSize}
           border={20}
-          topScoreBoard={100}
+          topScoreBoard={topScoreBoardHeight}
           color={COLOR.ORANGE}
           name="ghost4"
         ></Ghost>
