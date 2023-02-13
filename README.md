@@ -1,8 +1,9 @@
 # pacman-react
-Pacman game created as a showcase to use react + typescript + hooks + react context
+Is a game created as a showcase to understand how to use `react + typescript + hooks + react context`.
+
 The project was boilerplated with create-react-app.
 
-Take a look to the [Demo](https://mbfassnacht.github.io/pacman-react/)
+Play the game [here](https://mbfassnacht.github.io/pacman-react/)!
 
 [![pacman](https://github.com/mbfassnacht/assets/raw/master/images/pacman-react/react-pacman.png)](https://github.com/mbfassnacht/assets/raw/master/images/pacman-react/react-pacman.png)
 
